@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MovieActivity">
+
+    <ImageView
+        android:id="@+id/movie_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/movie_title"
+        android:text="Movie Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/movie_image"
+        app:layout_constraintTop_toTopOf="parent"
+
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        />
+
+    <TextView
+        android:id="@+id/movie_release_date"
+        android:text="2022"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/movie_image"
+        app:layout_constraintTop_toBottomOf="@id/movie_title"
+
+        android:textSize="20sp"
+        android:textColor="@color/teal_700"
+        />
+
+    <TextView
+        android:id="@+id/movie_description"
+        android:text="Jack Reacher must uncover the truth behind a major government conspiracy in order to clear his name. On the run as a fugitive from the law, Reacher uncovers a potential secret from his past that could change his life forever."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/movie_image"
+        app:layout_constraintTop_toBottomOf="@id/movie_release_date"
+        />
+
+    <Button
+        android:id="@+id/add_movie_button"
+        android:text="Add Movie to List"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/movie_image"
+        app:layout_constraintTop_toBottomOf="@id/movie_description"
+        />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

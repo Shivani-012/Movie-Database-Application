@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/search_for_movie"
+        android:title="Search..." />
+
+    <item
+        android:id="@+id/view_user_lists"
+        android:title="My Lists" />
+
+</menu>
