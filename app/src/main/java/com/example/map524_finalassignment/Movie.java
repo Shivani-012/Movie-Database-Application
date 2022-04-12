@@ -6,12 +6,20 @@ public class Movie {
 
     int id;
     String title;
-    Date releaseDate;
+    String releaseDate;
     String description;
     String posterPath;
     int [] genres;
 
-    Movie(String title, Date date, String desc, String poster, int [] genres){
+    Movie(){
+        id = 0;
+        title = "";
+        releaseDate = "";
+        description = "";
+        posterPath = "";
+    }
+
+    Movie(int id, String title, String date, String desc, String poster, int [] genres){
         this.title = title;
         this.releaseDate = date;
         this.description = desc;
@@ -35,11 +43,11 @@ public class Movie {
         this.title = title;
     }
 
-    public Date getReleaseDate() {
+    public String getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(Date releaseDate) {
+    public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
 
