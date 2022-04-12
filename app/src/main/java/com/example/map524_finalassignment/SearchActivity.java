@@ -1,12 +1,28 @@
 package com.example.map524_finalassignment;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SearchActivity extends AppCompatActivity implements
         MovieRecyclerAdapter.OnSelectListener,
@@ -23,6 +39,63 @@ public class SearchActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        networkingManager = ((MyApp)getApplication()).getNetworkingService();
+        jsonManager = ((MyApp)getApplication()).getJsonService();
+
+        networkingManager.listener = this;
+
+        movieTable = findViewById(R.id.recyclerViewSearch);
+
+        movieAdapter = new MovieRecyclerAdapter(movieList, this, this);
+        movieTable.setAdapter(movieAdapter);
+        movieTable.setLayoutManager((new LinearLayoutManager(this)));
+
+        setTitle("Search Movies...");
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu){
+        super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu, menu);
+
+        MenuItem searchViewMenuItem = menu.findItem(R.id.search);
+
+        SearchView searchView = (SearchView) searchViewMenuItem.getActionView();
+        String searchFor = searchView.getQuery().toString();
+        if (!searchFor.isEmpty()) {
+            searchView.setIconified(false);
+            searchView.setQuery(searchFor, false);
+        }
+
+        searchView.setQueryHint("Search for Movies");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {// when the user clicks enter
+
+                // search for movie using the text the user entered
+                networkingManager.searchForMovie(query);
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.length() >= 3) {
+                    // search for cities
+                    networkingManager.searchForMovie(newText);
+                }
+                else {
+                    movieList = new ArrayList<>(0);
+                    movieAdapter.setListOfMovies(movieList);
+                    movieAdapter.notifyDataSetChanged();
+
+                }
+                return false;
+            }
+        });
+
+        return true;
     }
 
     @Override

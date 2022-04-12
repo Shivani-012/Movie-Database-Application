@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements
         networkingManager = ((MyApp)getApplication()).getNetworkingService();
         jsonManager = ((MyApp)getApplication()).getJsonService();
 
+        networkingManager.listener = this;
+
         movieTable = findViewById(R.id.recyclerViewMain);
 
         movieAdapter = new MovieRecyclerAdapter(movieList.getAllMovies(), this, this);

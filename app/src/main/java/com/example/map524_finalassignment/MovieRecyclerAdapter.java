@@ -26,6 +26,10 @@ public class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieRecyclerAdap
             this.myOnSelectListener = onSelectListener;
         }
 
+        public void setListOfMovies(ArrayList<Movie> movies){
+            this.listOfMovies = movies;
+        }
+
         // create method for a history view holder
         @NonNull
         @Override

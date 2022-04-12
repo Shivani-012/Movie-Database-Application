@@ -36,8 +36,8 @@ public class NetworkingService {
         connect(trendingURL);
     }
 
-    public void searchForMovie(String movieChars){
-        String urlForMovie = movieSearchURL + movieChars;
+    public void searchForMovie(String movieText){
+        String urlForMovie = movieSearchURL + movieText;
         connect(urlForMovie);
     }
 
