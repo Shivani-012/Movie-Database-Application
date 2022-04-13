@@ -3,16 +3,25 @@ package com.example.map524_finalassignment;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.Date;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+@Entity
 public class Movie implements Parcelable {
 
+    @PrimaryKey
     int id;
     String title;
+    @ColumnInfo ( name = "release_year" )
     String releaseYear;
     String description;
+    @ColumnInfo ( name = "poster_path" )
     String posterPath;
     int [] genres;
+
+    boolean isFavourite;
+    boolean isWatchLater;
 
     Movie(){
         id = 0;
@@ -20,14 +29,6 @@ public class Movie implements Parcelable {
         releaseYear = "";
         description = "";
         posterPath = "";
-    }
-
-    Movie(int id, String title, String date, String desc, String poster, int [] genres){
-        this.title = title;
-        this.releaseYear = date;
-        this.description = desc;
-        this.posterPath = poster;
-        this.genres = genres;
     }
 
     protected Movie(Parcel in) {
@@ -97,6 +98,22 @@ public class Movie implements Parcelable {
 
     public void setGenres(int[] genres) {
         this.genres = genres;
+    }
+
+    public boolean isFavourite() {
+        return isFavourite;
+    }
+
+    public void setFavourite(boolean favourite) {
+        isFavourite = favourite;
+    }
+
+    public boolean isWatchLater() {
+        return isWatchLater;
+    }
+
+    public void setWatchLater(boolean watchLater) {
+        isWatchLater = watchLater;
     }
 
     @Override
