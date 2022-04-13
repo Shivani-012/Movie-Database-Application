@@ -4,7 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,7 +28,7 @@ public class NetworkingService {
 
     interface NetworkingListener{
         void dataListener(String jsonString);
-        void imageListener(Bitmap image);
+        void imageListener(Bitmap image, MovieRecyclerAdapter.MovieViewHolder holder);
     }
 
     public NetworkingListener listener;
@@ -41,7 +42,7 @@ public class NetworkingService {
         connect(urlForMovie);
     }
 
-    public void getMoviePoster(String posterPath) {
+    public void getMoviePoster(String posterPath, @NonNull MovieRecyclerAdapter.MovieViewHolder holder) {
         String urlForPoster = posterURL + posterPath;
         networkExecutorService.execute(new Runnable() {
             @Override
@@ -54,7 +55,7 @@ public class NetworkingService {
                     networkingHandler.post(new Runnable() {
                     @Override
                         public void run() {
-                            listener.imageListener(bitmap);
+                            listener.imageListener(bitmap, holder);
                         }
                     });
                 } catch (MalformedURLException e) {

@@ -18,12 +18,15 @@ public class JsonService {
             for (int i = 0 ; i < movieArray.length();i++){
                 JSONObject movieObject = movieArray.getJSONObject(i);
                 JSONArray genreArray = movieObject.getJSONArray("genre_ids");
+                String dateString = movieObject.getString("release_date");
+
+                String[] dateYear = dateString.split("-", 2);
 
                 Movie m = new Movie();
 
                 m.setId(movieObject.getInt("id"));
                 m.setTitle(movieObject.getString("original_title"));
-                m.setReleaseDate(movieObject.getString("release_date"));
+                m.setReleaseDate(dateYear[0]);
                 m.setDescription(movieObject.getString("overview"));
                 m.setPosterPath(movieObject.getString("poster_path"));
 

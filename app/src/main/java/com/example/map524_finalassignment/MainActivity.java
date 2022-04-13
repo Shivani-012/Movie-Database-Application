@@ -12,11 +12,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity implements
         MovieRecyclerAdapter.OnSelectListener,
         NetworkingService.NetworkingListener {
 
-    MovieManager movieList;
+    ArrayList<Movie> movieList = new ArrayList<Movie>();
     MovieRecyclerAdapter movieAdapter;
     RecyclerView movieTable;
 
@@ -28,15 +30,15 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        movieList = ((MyApp)getApplication()).movie_list;
         networkingManager = ((MyApp)getApplication()).getNetworkingService();
         jsonManager = ((MyApp)getApplication()).getJsonService();
 
         networkingManager.listener = this;
+        networkingManager.getTrendingMovies();
 
         movieTable = findViewById(R.id.recyclerViewMain);
 
-        movieAdapter = new MovieRecyclerAdapter(movieList.getAllMovies(), this, this);
+        movieAdapter = new MovieRecyclerAdapter(movieList, this, this, networkingManager);
         movieTable.setAdapter(movieAdapter);
         movieTable.setLayoutManager((new LinearLayoutManager(this)));
     }
@@ -79,14 +81,14 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void dataListener(String jsonString) {
-        movieList.setMovies(jsonManager.getMoviesFromJSON(jsonString));
-        movieAdapter = new MovieRecyclerAdapter(movieList.getAllMovies(), this, this);
+        movieList = jsonManager.getMoviesFromJSON(jsonString);
+        movieAdapter = new MovieRecyclerAdapter(movieList, this, this, networkingManager);
         movieTable.setAdapter(movieAdapter);
         movieAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void imageListener(Bitmap image) {
-
+    public void imageListener(Bitmap image, MovieRecyclerAdapter.MovieViewHolder holder) {
+        holder.posterImg.setImageBitmap(image);
     }
 }

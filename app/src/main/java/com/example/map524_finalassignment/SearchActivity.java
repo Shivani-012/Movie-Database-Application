@@ -1,28 +1,17 @@
 package com.example.map524_finalassignment;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class SearchActivity extends AppCompatActivity implements
         MovieRecyclerAdapter.OnSelectListener,
@@ -47,7 +36,7 @@ public class SearchActivity extends AppCompatActivity implements
 
         movieTable = findViewById(R.id.recyclerViewSearch);
 
-        movieAdapter = new MovieRecyclerAdapter(movieList, this, this);
+        movieAdapter = new MovieRecyclerAdapter(movieList, this, this, networkingManager);
         movieTable.setAdapter(movieAdapter);
         movieTable.setLayoutManager((new LinearLayoutManager(this)));
 
@@ -100,16 +89,19 @@ public class SearchActivity extends AppCompatActivity implements
 
     @Override
     public void OnMovieClick(int position) {
-
+        // Open Movie Detail Activity for movie
     }
 
     @Override
     public void dataListener(String jsonString) {
-
+        movieList = jsonManager.getMoviesFromJSON(jsonString);
+        movieAdapter = new MovieRecyclerAdapter(movieList, this, this, networkingManager);
+        movieTable.setAdapter(movieAdapter);
+        movieAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void imageListener(Bitmap image) {
+    public void imageListener(Bitmap image, MovieRecyclerAdapter.MovieViewHolder holder) {
 
     }
 }

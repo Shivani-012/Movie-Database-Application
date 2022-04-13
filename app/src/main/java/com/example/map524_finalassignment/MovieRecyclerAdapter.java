@@ -18,12 +18,14 @@ public class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieRecyclerAdap
         private ArrayList<Movie> listOfMovies;
         private Context context;
         private OnSelectListener myOnSelectListener;
+        private NetworkingService networkingService;
 
         // Overloaded constructor that sets listOfPurchases, context and onSelectListener
-        public MovieRecyclerAdapter(ArrayList<Movie> listOfMovies, Context context, OnSelectListener onSelectListener) {
+        public MovieRecyclerAdapter(ArrayList<Movie> listOfMovies, Context context, OnSelectListener onSelectListener, NetworkingService ns) {
             this.listOfMovies = listOfMovies;
             this.context = context;
             this.myOnSelectListener = onSelectListener;
+            this.networkingService = ns;
         }
 
         public void setListOfMovies(ArrayList<Movie> movies){
@@ -46,11 +48,7 @@ public class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieRecyclerAdap
             holder.titleText.setText(listOfMovies.get(position).getTitle());
             holder.dateText.setText(String.valueOf(listOfMovies.get(position).getReleaseDate()));
 
-            //URL newurl = new URL(listOfMovies.get(position).getPosterPath());
-            //Bitmap mIcon_val = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
-            //holder.posterImg.setImageBitmap(mIcon_val);
-
-            //holder.posterImg.setImageResource(listOfMovies.get(position).getPosterPath());
+            networkingService.getMoviePoster(listOfMovies.get(position).getPosterPath(), holder);
         }
 
         // method that returns the size of array list of purchases
