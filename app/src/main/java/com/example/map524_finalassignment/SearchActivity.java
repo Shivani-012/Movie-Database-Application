@@ -1,5 +1,6 @@
 package com.example.map524_finalassignment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Menu;
@@ -89,7 +90,13 @@ public class SearchActivity extends AppCompatActivity implements
 
     @Override
     public void OnMovieClick(int position) {
-        // Open Movie Detail Activity for movie
+        //  Open MovieDetail Activity
+        Intent movieDetailIntent = new Intent(this, MovieDetailActivity.class);
+
+        // Add clicked movie object to intent extras
+        movieDetailIntent.putExtra("clickedMovie", movieList.get(position));
+
+        startActivity(movieDetailIntent);
     }
 
     @Override
@@ -102,6 +109,6 @@ public class SearchActivity extends AppCompatActivity implements
 
     @Override
     public void imageListener(Bitmap image, MovieRecyclerAdapter.MovieViewHolder holder) {
-
+        holder.posterImg.setImageBitmap(image);
     }
 }
