@@ -26,16 +26,25 @@ public class DatabaseManager {
         return db;
     }
 
-    public void saveMovie(Movie newMovie, boolean listType){
+    public void getAllMovies(){
+        dbExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                db.movieDAO().getAllMovies();
+            }
+        });
+    }
+
+    public void addMovie(Movie newMovie, boolean listType){
         dbExecutor.execute(new Runnable() {
             @Override
             public void run() {
 
-                // check if its in movies ?
+                // get list of all movies stored in database
                 List<Movie> movies = db.movieDAO().getAllMovies();
 
-                boolean updateFlag = false;
-                updateFlag = movies.contains(newMovie);
+                // create flag that indicates whether newMovie is already in list
+                boolean updateFlag = movies.contains(newMovie);
 
                 newMovie.setFavourite(listType == true ? true : false);
                 newMovie.setWatchLater(listType == true ? false : true);
@@ -48,26 +57,42 @@ public class DatabaseManager {
         });
     }
 
-    public boolean removeMovie(Movie movieToRemove){
-
-        List<Movie> movies = db.movieDAO().getAllMovies();
-
-        if (movies.contains(movieToRemove)) {
-            db.movieDAO().removeMovie(movieToRemove);
-            return true;
-        }
-        else
-            return false;
+    public void updateMovie(Movie movieToUpdate){
+        dbExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                db.movieDAO().updateMovie(movieToUpdate);
+            }
+        });
     }
 
-    public List<Movie> getFavouriteMovies() {
-        List<Movie> movieList = db.movieDAO().getFavouriteMovies();
-        return movieList;
+    public void removeMovie(Movie movieToRemove){
+
+        dbExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                db.movieDAO().removeMovie(movieToRemove);
+            }
+        });
+
     }
 
-    public List<Movie> getWatchLaterMovies() {
-        List<Movie> movieList = db.movieDAO().getWatchLaterMovies();
-        return movieList;
+    public void getFavouriteMovies() {
+        dbExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                db.movieDAO().getFavouriteMovies();
+            }
+        });
+    }
+
+    public void getWatchLaterMovies() {
+        dbExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                db.movieDAO().getWatchLaterMovies();
+            }
+        });
     }
 
 }

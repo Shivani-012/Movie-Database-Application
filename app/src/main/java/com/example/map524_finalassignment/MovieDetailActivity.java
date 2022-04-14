@@ -23,12 +23,16 @@ public class MovieDetailActivity extends AppCompatActivity implements
     TextView movieDesc;
     Button addMovieBtn;
 
-    // create dbManager
+    // create managers for database and fragment
     DatabaseManager dbManager;
+    FragmentManager fm = getSupportFragmentManager();
 
+    // create movie object to store current movie
     Movie currentMovie;
 
-    FragmentManager fm = getSupportFragmentManager();
+    // create indicators for list type when adding a movie
+    boolean favouriteIndicator;
+    boolean watchLaterIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,10 @@ public class MovieDetailActivity extends AppCompatActivity implements
         // get database manager from myApp and get movie database
         dbManager = ((MyApp)getApplication()).dbManager;
         dbManager.getMovieDB(this);
+
+        // get indicator flags for list types
+        favouriteIndicator = ((MyApp)getApplication()).favouriteFlag;
+        watchLaterIndicator = ((MyApp)getApplication()).watchLaterFlag;
 
         // get movie object from intent
         currentMovie = getIntent().getExtras().getParcelable("clickedMovie");
@@ -91,12 +99,46 @@ public class MovieDetailActivity extends AppCompatActivity implements
 
     @Override
     public void dialogListenerOnFavourite() {
-        String message = currentMovie.getTitle() + " added to Favourite Movies list.";
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        String message; // declare message for toast
+
+        // check if movie is already in favourites list
+        if (currentMovie.isFavourite()){
+            // set abort message
+            message = currentMovie.getTitle() + " in already in Favourite Movies list.";
+        }
+        // else movie is not in favourites list
+        else {
+            currentMovie.setFavourite(true); // set favourite flag
+
+            // check if movie is in watch later list
+            if (currentMovie.isWatchLater()){
+
+                currentMovie.setWatchLater(false); // set watch later flag
+
+                dbManager.updateMovie(currentMovie); // update movie
+
+                // set success message
+                message = currentMovie.getTitle() + " has been moved to Favourite Movies list.";
+            }
+            else {
+                // add movie to database
+                dbManager.addMovie(currentMovie, favouriteIndicator);
+
+                // set success message
+                message = currentMovie.getTitle() + " added to Favourite Movies list.";
+            }
+
+            // print message
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void dialogListenerOnWatchLater() {
+
+        // add movie to
+        dbManager.addMovie(currentMovie, watchLaterIndicator);
+
         String message = currentMovie.getTitle() + " added to Watch Later list.";
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
