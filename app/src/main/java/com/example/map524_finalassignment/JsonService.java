@@ -17,7 +17,7 @@ public class JsonService {
             JSONArray movieArray = jsonObject.getJSONArray("results");
             for (int i = 0 ; i < movieArray.length();i++){
                 JSONObject movieObject = movieArray.getJSONObject(i);
-                JSONArray genreArray = movieObject.getJSONArray("genre_ids");
+                //JSONArray genreArray = movieObject.getJSONArray("genre_ids");
                 String dateString = movieObject.getString("release_date");
 
                 String[] dateYear = dateString.split("-", 2);
@@ -30,13 +30,13 @@ public class JsonService {
                 m.setDescription(movieObject.getString("overview"));
                 m.setPosterPath(movieObject.getString("poster_path"));
 
-                int [] genreList = new int[genreArray.length()];
+                //int [] genreList = new int[genreArray.length()];
 
-                for (int j = 0 ; j < genreArray.length() ; j++){
-                    genreList[j] = genreArray.getInt(j);
-                }
+                //for (int j = 0 ; j < genreArray.length() ; j++){
+                  //  genreList[j] = genreArray.getInt(j);
+                //}
 
-                m.setGenres(genreList);
+                //m.setGenres(genreList);
                 movieList.add(m);
             }
         } catch (JSONException e) {

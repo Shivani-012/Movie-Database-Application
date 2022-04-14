@@ -18,7 +18,6 @@ public class Movie implements Parcelable {
     String description;
     @ColumnInfo ( name = "poster_path" )
     String posterPath;
-    int [] genres;
 
     boolean isFavourite;
     boolean isWatchLater;
@@ -37,7 +36,6 @@ public class Movie implements Parcelable {
         releaseYear = in.readString();
         description = in.readString();
         posterPath = in.readString();
-        genres = in.createIntArray();
     }
 
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
@@ -92,14 +90,6 @@ public class Movie implements Parcelable {
         this.posterPath = posterPath;
     }
 
-    public int[] getGenres() {
-        return genres;
-    }
-
-    public void setGenres(int[] genres) {
-        this.genres = genres;
-    }
-
     public boolean isFavourite() {
         return isFavourite;
     }
@@ -128,6 +118,5 @@ public class Movie implements Parcelable {
         parcel.writeString(releaseYear);
         parcel.writeString(description);
         parcel.writeString(posterPath);
-        parcel.writeIntArray(genres);
     }
 }

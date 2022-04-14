@@ -39,23 +39,23 @@ public class MovieDetailActivity extends AppCompatActivity implements
         Movie currentMovie = getIntent().getExtras().getParcelable("clickedMovie");
 
         // initialize movie image and get movie poster
-        movieImg.findViewById(R.id.movie_detail_image);
+        movieImg = findViewById(R.id.movie_detail_image);
         networkingService.getMoviePoster(currentMovie.getPosterPath(), null);
 
         // initialize movie title and set title text
-        movieTitle.findViewById(R.id.movie_detail_title);
+        movieTitle = findViewById(R.id.movie_detail_title);
         movieTitle.setText(currentMovie.getTitle());
 
         // initialize movie date and set date text
-        movieDate.findViewById(R.id.movie_detail_release_date);
+        movieDate = findViewById(R.id.movie_detail_release_date);
         movieDate.setText(currentMovie.getReleaseDate());
 
         // initialize movie description and set description text
-        movieDesc.findViewById(R.id.movie_detail_description);
+        movieDesc = findViewById(R.id.movie_detail_description);
         movieDesc.setText(currentMovie.getDescription());
 
         // initialize add button and set on click listener
-        addMovieBtn.findViewById(R.id.add_movie_button);
+        addMovieBtn = findViewById(R.id.add_movie_button);
         addMovieBtn.setOnClickListener(this);
     }
 
