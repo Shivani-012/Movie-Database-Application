@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">MAP524 - Final Assignment</string>
+    <string name="movie_image_content_description">Movie Poster</string>
+    <string name="favourites_text">Favourite Movies</string>
+    <string name="watch_later_text">Watch Later</string>
+    <string name="cancel_text">Cancel</string>
+    <string name="add_movie_to_list_btn_text">Add Movie to List</string>
+    <string name="trending_movies_text">Trending Movies</string>
+    <string name="search_menu_text">Search Movies…</string>
 </resources>

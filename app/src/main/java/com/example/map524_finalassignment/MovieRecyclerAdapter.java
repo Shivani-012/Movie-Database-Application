@@ -14,13 +14,15 @@ import java.util.ArrayList;
 
 public class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieRecyclerAdapter.MovieViewHolder> {
 
-        // declare array list of products, context and special OnSelectListener object
+        // declare array list of movies, context and special OnSelectListener object
         private ArrayList<Movie> listOfMovies;
-        private Context context;
-        private OnSelectListener myOnSelectListener;
-        private NetworkingService networkingService;
+        private final Context context;
+        private final OnSelectListener myOnSelectListener;
 
-        // Overloaded constructor that sets listOfPurchases, context and onSelectListener
+        // declare network service (to be able to fetch movie posters)
+        private final NetworkingService networkingService;
+
+        // Overloaded constructor that sets listOfMovies, context, onSelectListener and networkingService
         public MovieRecyclerAdapter(ArrayList<Movie> listOfMovies, Context context, OnSelectListener onSelectListener, NetworkingService ns) {
             this.listOfMovies = listOfMovies;
             this.context = context;
@@ -28,11 +30,12 @@ public class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieRecyclerAdap
             this.networkingService = ns;
         }
 
+        // setter for list of movies
         public void setListOfMovies(ArrayList<Movie> movies){
             this.listOfMovies = movies;
         }
 
-        // create method for a history view holder
+        // create method for a movie view holder
         @NonNull
         @Override
         public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -42,22 +45,24 @@ public class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieRecyclerAdap
             return new MovieViewHolder(view, myOnSelectListener);
         }
 
-    // method that binds values of a purchase to view holder
+    // method that binds values of a movie to view holder
         @Override
         public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
+            // set text of movie title & date
             holder.titleText.setText(listOfMovies.get(position).getTitle());
             holder.dateText.setText(String.valueOf(listOfMovies.get(position).getReleaseDate()));
 
+            // use networkingService to get the bitmap for the movie poster
             networkingService.getMoviePoster(listOfMovies.get(position).getPosterPath(), holder);
         }
 
-        // method that returns the size of array list of purchases
+        // method that returns the size of array list of movies
         @Override
         public int getItemCount() {
             return listOfMovies.size();
         }
 
-        // History View Holder Class
+        // Movie View Holder Class
         public static class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
             // declare text views for each view field
@@ -81,7 +86,7 @@ public class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieRecyclerAdap
                 itemView.setOnClickListener(this); // listen to clicked for this holder
             }
 
-            // when view holder is clicked, call OnPurchaseSelect() passing the position of the purchase in the array list
+            // when view holder is clicked, call OnMovieClick() passing the position of the movie in the array list
             @Override
             public void onClick(View view) {
                 myOnSelectListener.OnMovieClick(getAdapterPosition());

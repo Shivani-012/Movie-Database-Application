@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MAP524FinalAssignment" >
         <activity
-            android:name=".WatchLaterActivity"
+            android:name=".WatchLaterListActivity"
             android:exported="false" />
         <activity
             android:name=".FavouriteListActivity"

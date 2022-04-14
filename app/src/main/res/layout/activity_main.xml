@@ -10,7 +10,7 @@
         android:id="@+id/trending_movies_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Trending Movies"
+        android:text="@string/trending_movies_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
 

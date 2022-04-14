@@ -8,7 +8,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp">
 
     <ImageView
@@ -18,11 +18,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/movie_image_content_description"
         />
 
     <TextView
         android:id="@+id/movie_detail_title"
-        android:text="Movie Title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,7 +36,6 @@
 
     <TextView
         android:id="@+id/movie_detail_release_date"
-        android:text="2022"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,7 +56,7 @@
 
     <Button
         android:id="@+id/add_movie_button"
-        android:text="Add Movie to List"
+        android:text="@string/add_movie_to_list_btn_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"

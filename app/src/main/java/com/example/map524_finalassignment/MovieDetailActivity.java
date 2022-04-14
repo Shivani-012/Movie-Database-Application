@@ -76,11 +76,10 @@ public class MovieDetailActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void dataListener(String jsonString) {
-
-    }
+    public void dataListener(String jsonString) { }
 
     @Override
+    // image listener function that sets the movie poster image
     public void imageListener(Bitmap image, MovieRecyclerAdapter.MovieViewHolder holder) {
         // set the movie poster image
         movieImg.setImageBitmap(image);
@@ -98,6 +97,7 @@ public class MovieDetailActivity extends AppCompatActivity implements
     }
 
     @Override
+    // method that handles when adding a movie to favourites list is selected
     public void dialogListenerOnFavourite() {
         String message; // declare message for toast
 
@@ -113,6 +113,9 @@ public class MovieDetailActivity extends AppCompatActivity implements
             // check if movie is in watch later list
             if (currentMovie.isWatchLater()){
 
+                // TODO
+                // add dialog asking to move it to watch later
+
                 currentMovie.setWatchLater(false); // set watch later flag
 
                 dbManager.updateMovie(currentMovie); // update movie
@@ -127,23 +130,53 @@ public class MovieDetailActivity extends AppCompatActivity implements
                 // set success message
                 message = currentMovie.getTitle() + " added to Favourite Movies list.";
             }
-
-            // print message
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         }
-    }
-
-    @Override
-    public void dialogListenerOnWatchLater() {
-
-        // add movie to
-        dbManager.addMovie(currentMovie, watchLaterIndicator);
-
-        String message = currentMovie.getTitle() + " added to Watch Later list.";
+        // print message
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
+    // method that handles when adding a movie to watch later list is selected
+    public void dialogListenerOnWatchLater() {
+
+        String message; // declare message for toast
+
+        // check if movie is already in watch later list
+        if (currentMovie.isWatchLater()){
+            // set abort message
+            message = currentMovie.getTitle() + " in already in Watch Later list.";
+        }
+        // else movie is not in watch later list
+        else {
+            currentMovie.setWatchLater(true); // set watch later flag
+
+            // check if movie is in favourites list
+            if (currentMovie.isFavourite()){
+
+                // TODO
+                // add dialog asking to move it to watch later
+
+                currentMovie.setFavourite(false); // set favourite flag
+
+                dbManager.updateMovie(currentMovie); // update movie
+
+                // set success message
+                message = currentMovie.getTitle() + " has been moved to Watch Later list.";
+            }
+            else {
+                // add movie to database
+                dbManager.addMovie(currentMovie, watchLaterIndicator);
+
+                // set success message
+                message = currentMovie.getTitle() + " added to Watch Later list.";
+            }
+        }
+        // print message
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    // method that when cancel is selected on dialog fragment
     public void dialogListenerOnCancel() {
         Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
     }
