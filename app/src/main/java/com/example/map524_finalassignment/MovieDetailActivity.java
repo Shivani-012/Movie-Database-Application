@@ -1,6 +1,7 @@
 package com.example.map524_finalassignment;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -8,9 +9,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MovieDetailActivity extends AppCompatActivity implements
-        NetworkingService.NetworkingListener, View.OnClickListener {
+        NetworkingService.NetworkingListener,
+        View.OnClickListener,
+        FragmentDialog.DialogClickListener {
 
     // initialize layout elements
     ImageView movieImg;
@@ -21,6 +25,10 @@ public class MovieDetailActivity extends AppCompatActivity implements
 
     // create dbManager
     DatabaseManager dbManager;
+
+    Movie currentMovie;
+
+    FragmentManager fm = getSupportFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +44,7 @@ public class MovieDetailActivity extends AppCompatActivity implements
         dbManager.getMovieDB(this);
 
         // get movie object from intent
-        Movie currentMovie = getIntent().getExtras().getParcelable("clickedMovie");
+        currentMovie = getIntent().getExtras().getParcelable("clickedMovie");
 
         // initialize movie image and get movie poster
         movieImg = findViewById(R.id.movie_detail_image);
@@ -60,14 +68,6 @@ public class MovieDetailActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onClick(View view) {
-
-        // open dialog fragment?
-        // asks which list to add it to
-
-    }
-
-    @Override
     public void dataListener(String jsonString) {
 
     }
@@ -78,4 +78,31 @@ public class MovieDetailActivity extends AppCompatActivity implements
         movieImg.setImageBitmap(image);
     }
 
+    @Override
+    // method for when "Add to List" button is clicked
+    public void onClick(View view) {
+
+        // create new instance of fragment and show it
+        FragmentDialog dialog = FragmentDialog.newInstance(currentMovie.getTitle());
+        dialog.show(fm, FragmentDialog.Tag);
+
+        dialog.listener = this; // set listener
+    }
+
+    @Override
+    public void dialogListenerOnFavourite() {
+        String message = currentMovie.getTitle() + " added to Favourite Movies list.";
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void dialogListenerOnWatchLater() {
+        String message = currentMovie.getTitle() + " added to Watch Later list.";
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void dialogListenerOnCancel() {
+        Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
+    }
 }
