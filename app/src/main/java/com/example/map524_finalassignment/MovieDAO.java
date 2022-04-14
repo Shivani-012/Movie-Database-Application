@@ -12,7 +12,7 @@ import java.util.List;
 public interface MovieDAO {
 
     @Insert
-    void addNewMovie(Movie newMovie);
+    void addMovie(Movie newMovie);
 
     @Delete
     void removeMovie(Movie movieToRemove);

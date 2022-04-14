@@ -19,6 +19,9 @@ public class MovieDetailActivity extends AppCompatActivity implements
     TextView movieDesc;
     Button addMovieBtn;
 
+    // create dbManager
+    DatabaseManager dbManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +30,10 @@ public class MovieDetailActivity extends AppCompatActivity implements
         // get networking service and set listener
         NetworkingService networkingService = ((MyApp)getApplication()).getNetworkingService();
         networkingService.listener = this;
+
+        // get database manager from myApp and get movie database
+        dbManager = ((MyApp)getApplication()).dbManager;
+        dbManager.getMovieDB(this);
 
         // get movie object from intent
         Movie currentMovie = getIntent().getExtras().getParcelable("clickedMovie");
