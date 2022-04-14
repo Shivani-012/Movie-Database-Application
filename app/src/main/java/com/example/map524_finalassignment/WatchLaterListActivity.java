@@ -1,5 +1,6 @@
 package com.example.map524_finalassignment;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,10 +27,16 @@ public class WatchLaterListActivity extends AppCompatActivity implements
     // declare database manager
     DatabaseManager dbManager;
 
+    // declare builder for alert dialog box
+    AlertDialog.Builder builder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_watch_later_list);
+
+        // initialize builder for alert dialog box
+        builder = new AlertDialog.Builder(this);
 
         // get database manager
         dbManager = ((MyApp)getApplication()).dbManager;
