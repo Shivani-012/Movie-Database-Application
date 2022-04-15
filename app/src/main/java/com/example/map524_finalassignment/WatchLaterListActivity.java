@@ -16,7 +16,8 @@ import java.util.ArrayList;
 
 public class WatchLaterListActivity extends AppCompatActivity implements
         MovieRecyclerAdapter.OnSelectListener,
-        NetworkingService.NetworkingListener{
+        NetworkingService.NetworkingListener,
+        DatabaseManager.DBCallBackInterface {
 
     // declare array list, adapter and recycler view
     ArrayList<Movie> movieList = new ArrayList<Movie>();
@@ -32,6 +33,9 @@ public class WatchLaterListActivity extends AppCompatActivity implements
 
     // declare builder for alert dialog box
     AlertDialog.Builder builder;
+
+    // declare movie object for swiped movie
+    Movie swipedMovie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,18 +90,17 @@ public class WatchLaterListActivity extends AppCompatActivity implements
                     int position = viewHolder.getAdapterPosition();
 
                     // get swiped movie
-                    Movie swipedMovie = movieList.get(position);
+                    swipedMovie = movieList.get(position);
 
                     // use alert dialog to confirm with user that they want to remove movie from list
                     builder.setMessage("Do want to remove " + swipedMovie.getTitle() + " from your Watch Later list?")
                             .setPositiveButton("OK", (dialog, i) -> {
 
+                                // remove movie
                                 dbManager.removeMovie(swipedMovie);
 
                             })
-                            .setNegativeButton("CANCEL", (dialog, i) -> {
-
-                            })
+                            .setNegativeButton("CANCEL", null)
                             .setCancelable(false)
                             .show();
                 }
@@ -115,11 +118,49 @@ public class WatchLaterListActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void dataListener(String jsonString) { }
-
-    @Override
     // method that detects when a bitmap image is returned from another thread
     public void imageListener(Bitmap image, MovieRecyclerAdapter.MovieViewHolder holder) {
         holder.posterImg.setImageBitmap(image);
     }
+
+    @Override
+    // method that detects when a movie was successfully removed
+    public void movieRemoved(boolean result) {
+        // print message
+        if (result)
+            if (swipedMovie != null)
+                Toast.makeText(this, swipedMovie.getTitle() + " has been removed from your list.", Toast.LENGTH_LONG).show();
+            else
+                Toast.makeText(this, "Movie has been removed from your list.", Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    // method that detects when list of watch later movies have been read from database
+    public void listOfWatchLaterMovies(ArrayList<Movie> movies) {
+        // reset movie adapter with list of watch later movies
+        movieAdapter = new MovieRecyclerAdapter(movies, this, this, networkingManager);
+        movieTable.setAdapter(movieAdapter);
+        movieAdapter.notifyDataSetChanged();
+    }
+
+
+    /*/
+     * Listener methods implementation not needed in this activity
+    /*/
+    @Override
+    public void dataListener(String jsonString) { }
+
+    @Override
+    public void movieAdded(boolean result, boolean listType) { }
+
+    @Override
+    public void movieUpdated(boolean listType) { }
+
+    @Override
+    public void listOfAllMovies(ArrayList<Movie> movies) { }
+
+    @Override
+    public void listOfFavouriteMovies(ArrayList<Movie> movies) { }
+
 }

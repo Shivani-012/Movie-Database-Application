@@ -6,7 +6,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import java.util.List;
+import java.util.ArrayList;
 
 @Dao
 public interface MovieDAO {
@@ -18,13 +18,13 @@ public interface MovieDAO {
     void removeMovie(Movie movieToRemove);
 
     @Query("SELECT * FROM Movie")
-    List<Movie> getAllMovies();
+    ArrayList<Movie> getAllMovies();
 
     @Query("SELECT * FROM Movie WHERE isFavourite = 1")
-    List<Movie> getFavouriteMovies();
+    ArrayList<Movie> getFavouriteMovies();
 
     @Query("SELECT * FROM Movie WHERE isWatchLater = 1")
-    List<Movie> getWatchLaterMovies();
+    ArrayList<Movie> getWatchLaterMovies();
 
     @Update
     void updateMovie(Movie movieToUpdate);

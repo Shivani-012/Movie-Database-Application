@@ -12,10 +12,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class MovieDetailActivity extends AppCompatActivity implements
         NetworkingService.NetworkingListener,
         View.OnClickListener,
-        FragmentDialog.DialogClickListener {
+        FragmentDialog.DialogClickListener,
+        DatabaseManager.DBCallBackInterface {
 
     // initialize layout elements
     ImageView movieImg;
@@ -83,9 +86,6 @@ public class MovieDetailActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void dataListener(String jsonString) { }
-
-    @Override
     // image listener function that sets the movie poster image
     public void imageListener(Bitmap image, MovieRecyclerAdapter.MovieViewHolder holder) {
         // set the movie poster image
@@ -112,7 +112,7 @@ public class MovieDetailActivity extends AppCompatActivity implements
         if (currentMovie.isFavourite()){
             // set abort message
             message = currentMovie.getTitle() + " in already in Favourite Movies list.";
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         }
         // else movie is not in favourites list
         else {
@@ -126,16 +126,14 @@ public class MovieDetailActivity extends AppCompatActivity implements
                             currentMovie.setWatchLater(false); // set watch later flag
                             currentMovie.setFavourite(true); // set favourite flag
 
-                            dbManager.updateMovie(currentMovie); // update movie
+                            dbManager.updateMovie(currentMovie, favouriteIndicator); // update movie
 
-                            // print success message
-                            Toast.makeText(this, currentMovie.getTitle() + " has been moved to your Favourite Movies list.", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
                         })
                         .setNegativeButton("CANCEL", (dialog, i) -> {
 
                             // print cancel message
-                            Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Cancelled.", Toast.LENGTH_LONG).show();
                             dialog.dismiss();
                         })
                         .setCancelable(false)
@@ -150,7 +148,7 @@ public class MovieDetailActivity extends AppCompatActivity implements
 
                 // set success message & print
                 message = currentMovie.getTitle() + " added to Favourite Movies list.";
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -165,7 +163,7 @@ public class MovieDetailActivity extends AppCompatActivity implements
         if (currentMovie.isWatchLater()){
             // set abort message
             message = currentMovie.getTitle() + " in already in Watch Later list.";
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         }
         // else movie is not in watch later list
         else {
@@ -179,16 +177,14 @@ public class MovieDetailActivity extends AppCompatActivity implements
                             currentMovie.setFavourite(false); // set favourite flag
                             currentMovie.setWatchLater(true); // set watch later flag
 
-                            dbManager.updateMovie(currentMovie); // update movie
+                            dbManager.updateMovie(currentMovie, watchLaterIndicator); // update movie
 
-                            // print success message
-                            Toast.makeText(this, currentMovie.getTitle() + " has been moved to your Watch Later list.", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
                         })
                         .setNegativeButton("CANCEL", (dialog, i) -> {
 
                             // print cancel message
-                            Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Cancelled.", Toast.LENGTH_LONG).show();
                             dialog.dismiss();
                         })
                         .setCancelable(false)
@@ -203,7 +199,7 @@ public class MovieDetailActivity extends AppCompatActivity implements
 
                 // set success message
                 message = currentMovie.getTitle() + " added to Watch Later list.";
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -211,6 +207,54 @@ public class MovieDetailActivity extends AppCompatActivity implements
     @Override
     // method that when cancel is selected on dialog fragment
     public void dialogListenerOnCancel() {
-        Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
     }
+
+    @Override
+    // method that notifies the result of adding a movie
+    public void movieAdded(boolean result, boolean listType) {
+
+        // get the name of the type of list that was added to
+        String listName = listType == true ? "Favourite Movies" : "Watch Later";
+
+        // if result is true, adding was successful
+        if (result) {
+            // print success message
+            Toast.makeText(this, currentMovie.getTitle() + " has been added to your " + listName + " list.", Toast.LENGTH_LONG).show();
+        }
+        // else adding was unsuccessful, user tried to add a movie they already have
+        else
+            // print abort message
+            Toast.makeText(this, currentMovie.getTitle() + " is already in your " + listName + " list.", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    // method that notifies the result of updating a movie
+    public void movieUpdated(boolean listType) {
+
+        // get the name of the type of list that was added to
+        String listName = listType == true ? "Favourite Movies" : "Watch Later";
+
+        // print success message for moving the movie to new list
+        Toast.makeText(this, currentMovie.getTitle() + " has been moved to your " + listName + " list.", Toast.LENGTH_LONG).show();
+    }
+
+
+    /*/
+     * Listener methods implementation not needed in this activity
+    /*/
+    @Override
+    public void dataListener(String jsonString) { }
+
+    @Override
+    public void movieRemoved(boolean result) { }
+
+    @Override
+    public void listOfAllMovies(ArrayList<Movie> movies) { }
+
+    @Override
+    public void listOfFavouriteMovies(ArrayList<Movie> movies) { }
+
+    @Override
+    public void listOfWatchLaterMovies(ArrayList<Movie> movies) { }
 }
