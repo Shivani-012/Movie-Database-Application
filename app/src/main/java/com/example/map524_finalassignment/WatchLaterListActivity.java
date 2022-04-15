@@ -1,13 +1,16 @@
 package com.example.map524_finalassignment;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -59,8 +62,46 @@ public class WatchLaterListActivity extends AppCompatActivity implements
         movieTable.setAdapter(movieAdapter);
         movieTable.setLayoutManager((new LinearLayoutManager(this)));
 
+        // declare item touch helper to enable swipe to delete functionality
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(movieTable);
+
         setTitle("Watch Later");
     }
+
+    // method that handles when a movie in the recycler view is moved / swiped
+    ItemTouchHelper.SimpleCallback simpleItemTouchCallback =
+            new ItemTouchHelper.SimpleCallback(
+                    0, ItemTouchHelper.LEFT) {
+                @Override
+                public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                    return false;
+                }
+
+                @Override
+                // method that handles when a movie is swiped
+                public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+                    // get position of swiped movie
+                    int position = viewHolder.getAdapterPosition();
+
+                    // get swiped movie
+                    Movie swipedMovie = movieList.get(position);
+
+                    // use alert dialog to confirm with user that they want to remove movie from list
+                    builder.setMessage("Do want to remove " + swipedMovie.getTitle() + " from your Watch Later list?")
+                            .setPositiveButton("OK", (dialog, i) -> {
+
+                                dbManager.removeMovie(swipedMovie);
+
+                            })
+                            .setNegativeButton("CANCEL", (dialog, i) -> {
+
+                            })
+                            .setCancelable(false)
+                            .show();
+                }
+            };
 
     @Override
     // method that handles when a movie is selected in the recycler view
