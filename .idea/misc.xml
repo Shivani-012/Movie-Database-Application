@@ -3,10 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/shiva/AndroidStudioProjects/MAP524FinalAssignment/app/src/main/res/drawable/ic_baseline_keyboard_arrow_left_24.xml" value="0.1953125" />
+        <entry key="..\:/Users/shiva/AndroidStudioProjects/MAP524FinalAssignment/app/src/main/res/drawable/ic_baseline_keyboard_arrow_right_24.xml" value="0.1953125" />
         <entry key="..\:/Users/shiva/AndroidStudioProjects/MAP524FinalAssignment/app/src/main/res/layout-land/activity_movie.xml" value="0.1" />
         <entry key="..\:/Users/shiva/AndroidStudioProjects/MAP524FinalAssignment/app/src/main/res/layout/activity_favourite_list.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/shiva/AndroidStudioProjects/MAP524FinalAssignment/app/src/main/res/layout/activity_main.xml" value="0.264" />
-        <entry key="..\:/Users/shiva/AndroidStudioProjects/MAP524FinalAssignment/app/src/main/res/layout/activity_movie.xml" value="0.1" />
+        <entry key="..\:/Users/shiva/AndroidStudioProjects/MAP524FinalAssignment/app/src/main/res/layout/activity_main.xml" value="0.536" />
+        <entry key="..\:/Users/shiva/AndroidStudioProjects/MAP524FinalAssignment/app/src/main/res/layout/activity_movie.xml" value="0.2" />
         <entry key="..\:/Users/shiva/AndroidStudioProjects/MAP524FinalAssignment/app/src/main/res/layout/activity_user_list.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/shiva/AndroidStudioProjects/MAP524FinalAssignment/app/src/main/res/layout/activity_watch_later_list.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/shiva/AndroidStudioProjects/MAP524FinalAssignment/app/src/main/res/layout/base_adapter_movie_row.xml" value="0.25416666666666665" />

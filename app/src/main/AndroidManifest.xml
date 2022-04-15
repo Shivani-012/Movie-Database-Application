@@ -31,7 +31,11 @@
 
         <activity
             android:name=".MovieDetailActivity"
-            android:exported="true" />
+            android:exported="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
 
         <activity
             android:name=".SearchActivity"

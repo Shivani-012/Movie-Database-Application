@@ -18,7 +18,7 @@ import java.util.concurrent.Executors;
 public class NetworkingService {
 
     // declare and initialize url text for trending movies, movie search and poster search
-    private final String trendingURL = "https://api.themoviedb.org/3/trending/movie/day?api_key=989e7ae3797c43076bfe511c208fc9cb";
+    private final String trendingURL = "https://api.themoviedb.org/3/trending/movie/day?api_key=989e7ae3797c43076bfe511c208fc9cb&page=";
     private final String movieSearchURL = "https://api.themoviedb.org/3/search/movie?api_key=989e7ae3797c43076bfe511c208fc9cb&query=";
     private final String posterURL = "https://image.tmdb.org/t/p/w500";
 
@@ -35,8 +35,9 @@ public class NetworkingService {
     public NetworkingListener listener; // declare listener
 
     // method that gets trending movies
-    public void getTrendingMovies(){
-        connect(trendingURL);
+    public void getTrendingMovies(int pageNum){
+        String urlForTrending = trendingURL + pageNum;
+        connect(urlForTrending);
     }
 
     // method that searches for movies

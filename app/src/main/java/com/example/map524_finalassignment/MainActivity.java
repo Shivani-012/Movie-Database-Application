@@ -2,21 +2,31 @@ package com.example.map524_finalassignment;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements
         MovieRecyclerAdapter.OnSelectListener,
-        NetworkingService.NetworkingListener {
+        NetworkingService.NetworkingListener,
+        View.OnClickListener {
+
+    // declare views for page navigation
+    Button backBtn, nextBtn;
+    TextView pageNumView;
 
     // declare array list, adapter and recycler view
     ArrayList<Movie> movieList = new ArrayList<Movie>();
@@ -27,18 +37,44 @@ public class MainActivity extends AppCompatActivity implements
     NetworkingService networkingManager;
     JsonService jsonManager;
 
+    // declare integer to hold page number
+    int pageNum;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // get query from save instance state
+        if (savedInstanceState != null)
+            pageNum = savedInstanceState.getInt("page_number");
+        else
+            pageNum = 1;
+
         // get networking service and set listener
         networkingManager = ((MyApp)getApplication()).getNetworkingService();
         networkingManager.listener = this;
-        networkingManager.getTrendingMovies(); // get trending movies
+        networkingManager.getTrendingMovies(pageNum); // get trending movies
 
         // get json service
         jsonManager = ((MyApp)getApplication()).getJsonService();
+
+        backBtn = findViewById(R.id.trending_back_btn);
+        backBtn.setOnClickListener(this);
+
+        nextBtn = findViewById(R.id.trending_next_btn);
+        nextBtn.setOnClickListener(this);
+
+        pageNumView = findViewById(R.id.trending_page_number);
+        pageNumView.setText(String.valueOf(pageNum));
+        if (pageNum == 1){
+            backBtn.setEnabled(false);
+            backBtn.setCompoundDrawableTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.gray)));
+        }
+        else {
+            backBtn.setEnabled(true);
+            backBtn.setCompoundDrawableTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.purple_500)));
+        }
 
         // initialize recycler view
         movieTable = findViewById(R.id.recyclerViewMain);
@@ -113,4 +149,49 @@ public class MainActivity extends AppCompatActivity implements
     public void imageListener(Bitmap image, MovieRecyclerAdapter.MovieViewHolder holder) {
         holder.posterImg.setImageBitmap(image);
     }
+
+    @Override
+    // save counter values in save instance state
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("page_number", pageNum);
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id = view.getId(); // get view id
+
+        switch(id) {
+            // if back button is clicked
+            case R.id.trending_back_btn:
+                if (pageNum > 1) {
+                    --pageNum; // decrement page number
+                    networkingManager.getTrendingMovies(pageNum); // get trending movies for previous page
+                    pageNumView.setText(String.valueOf(pageNum));
+
+                    // if page is page 1
+                    if (pageNum == 1) {
+                        // disable back button and change colour
+                        backBtn.setEnabled(false);
+                        backBtn.setCompoundDrawableTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.gray)));
+                    }
+                }
+                break;
+            case R.id.trending_next_btn:
+
+                // if current page number is 1
+                if (pageNum == 1) {
+                    // enable back button and change colour
+                    backBtn.setEnabled(true);
+                    backBtn.setCompoundDrawableTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.purple_500)));
+                }
+
+                ++pageNum; // increment page number
+                networkingManager.getTrendingMovies(pageNum); // get trending movies for next page
+                pageNumView.setText(String.valueOf(pageNum));
+
+                break;
+        }
+    }
+
 }

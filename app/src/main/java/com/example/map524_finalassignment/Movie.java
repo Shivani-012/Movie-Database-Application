@@ -41,20 +41,18 @@ public class Movie implements Parcelable {
     }
 
     // parcelable movie constructor
-    @RequiresApi(api = Build.VERSION_CODES.Q)
     protected Movie(Parcel in) {
         id = in.readInt();
         title = in.readString();
         releaseYear = in.readString();
         description = in.readString();
         posterPath = in.readString();
-        isFavourite = in.readBoolean();
-        isWatchLater = in.readBoolean();
+        isFavourite = in.readInt() == 1;
+        isWatchLater = in.readInt() == 1;
     }
 
 
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
-        @RequiresApi(api = Build.VERSION_CODES.Q)
         @Override
         public Movie createFromParcel(Parcel in) {
             return new Movie(in);
@@ -150,5 +148,7 @@ public class Movie implements Parcelable {
         parcel.writeString(releaseYear);
         parcel.writeString(description);
         parcel.writeString(posterPath);
+        parcel.writeInt(isFavourite ? 1 : 0);
+        parcel.writeInt(isWatchLater ? 1 : 0);
     }
 }
