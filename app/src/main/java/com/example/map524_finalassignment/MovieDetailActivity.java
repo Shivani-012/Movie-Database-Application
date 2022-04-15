@@ -1,5 +1,6 @@
 package com.example.map524_finalassignment;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +87,13 @@ public class MovieDetailActivity extends AppCompatActivity implements
         // initialize add button and set on click listener
         addMovieBtn = findViewById(R.id.add_movie_button);
         addMovieBtn.setOnClickListener(this);
+
+        setTitle(currentMovie.getTitle());
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 
     @Override
@@ -152,10 +161,6 @@ public class MovieDetailActivity extends AppCompatActivity implements
 
                 // add movie to database
                 dbManager.addMovie(currentMovie, favouriteIndicator);
-
-                // set success message & print
-                message = currentMovie.getTitle() + " added to Favourite Movies list.";
-                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -208,10 +213,6 @@ public class MovieDetailActivity extends AppCompatActivity implements
 
                 // add movie to database
                 dbManager.addMovie(currentMovie, watchLaterIndicator);
-
-                // set success message
-                message = currentMovie.getTitle() + " added to Watch Later list.";
-                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
             }
         }
     }
