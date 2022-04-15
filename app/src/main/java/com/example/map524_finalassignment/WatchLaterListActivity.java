@@ -97,12 +97,11 @@ public class WatchLaterListActivity extends AppCompatActivity implements
                     // use alert dialog to confirm with user that they want to remove movie from list
                     builder.setMessage("Do want to remove " + swipedMovie.getTitle() + " from your Watch Later list?")
                             .setPositiveButton("OK", (dialog, i) -> {
-
-                                // remove movie
-                                dbManager.removeMovie(swipedMovie);
-
+                                dbManager.removeMovie(swipedMovie); // remove movie
                             })
-                            .setNegativeButton("CANCEL", null)
+                            .setNegativeButton("CANCEL", (dialog, i) -> {
+                                dbManager.getWatchLaterMovies(); // get list of watch later movies
+                            })
                             .setCancelable(false)
                             .show();
                 }
@@ -129,11 +128,14 @@ public class WatchLaterListActivity extends AppCompatActivity implements
     // method that detects when a movie was successfully removed
     public void movieRemoved(boolean result) {
         // print message
-        if (result)
+        if (result) {
             if (swipedMovie != null)
                 Toast.makeText(this, swipedMovie.getTitle() + " has been removed from your list.", Toast.LENGTH_LONG).show();
             else
                 Toast.makeText(this, "Movie has been removed from your list.", Toast.LENGTH_LONG).show();
+
+            dbManager.getWatchLaterMovies(); // get list of watch later movies again
+        }
 
     }
 
