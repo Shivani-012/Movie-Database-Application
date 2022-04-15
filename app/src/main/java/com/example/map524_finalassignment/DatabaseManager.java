@@ -6,7 +6,6 @@ import android.os.Looper;
 
 import androidx.room.Room;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,9 +17,9 @@ public class DatabaseManager {
         void movieAdded(boolean result, boolean listType);
         void movieRemoved(boolean result);
         void movieUpdated(boolean listType);
-        void listOfAllMovies(ArrayList<Movie> movies);
-        void listOfFavouriteMovies(ArrayList<Movie> movies);
-        void listOfWatchLaterMovies(ArrayList<Movie> movies);
+        void listOfAllMovies(List<Movie> movies);
+        void listOfFavouriteMovies(List<Movie> movies);
+        void listOfWatchLaterMovies(List<Movie> movies);
     }
 
     // declare variables for database, callback interface, executor and handler
@@ -46,7 +45,7 @@ public class DatabaseManager {
             @Override
             public void run() {
                 // get list of all movies from database
-                ArrayList<Movie> movieList = db.movieDAO().getAllMovies();
+                List<Movie> movieList = db.movieDAO().getAllMovies();
                 dbHandler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -152,7 +151,7 @@ public class DatabaseManager {
             @Override
             public void run() {
                 // get list of favourite movies
-                ArrayList<Movie> movieList = db.movieDAO().getFavouriteMovies();
+                List<Movie> movieList = db.movieDAO().getFavouriteMovies();
 
                 dbHandler.post(new Runnable() {
                     @Override
@@ -171,7 +170,7 @@ public class DatabaseManager {
             @Override
             public void run() {
                 // get list of watch later movies
-                ArrayList<Movie> movieList = db.movieDAO().getWatchLaterMovies();
+                List<Movie> movieList = db.movieDAO().getWatchLaterMovies();
 
                 dbHandler.post(new Runnable() {
                     @Override

@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FavouriteListActivity extends AppCompatActivity implements
         MovieRecyclerAdapter.OnSelectListener,
@@ -45,8 +46,9 @@ public class FavouriteListActivity extends AppCompatActivity implements
         // initialize builder for alert dialog box
         builder = new AlertDialog.Builder(this);
 
-        // get database manager
+        // get database manager & set listener
         dbManager = ((MyApp)getApplication()).dbManager;
+        dbManager.listener = this;
         dbManager.getMovieDB(this);
 
         dbManager.getFavouriteMovies(); // get movies in "Favourite Movies" list
@@ -136,9 +138,14 @@ public class FavouriteListActivity extends AppCompatActivity implements
 
     @Override
     // method that detects when list of favourite movies have been read from database
-    public void listOfFavouriteMovies(ArrayList<Movie> movies) {
+    public void listOfFavouriteMovies(List<Movie> movies) {
+
+        // add all movies from list to array list
+        movieList.clear();
+        movieList.addAll(movies);
+
         // reset movie adapter with list of favourite movies
-        movieAdapter = new MovieRecyclerAdapter(movies, this, this, networkingManager);
+        movieAdapter = new MovieRecyclerAdapter(movieList, this, this, networkingManager);
         movieTable.setAdapter(movieAdapter);
         movieAdapter.notifyDataSetChanged();
     }
@@ -157,8 +164,8 @@ public class FavouriteListActivity extends AppCompatActivity implements
     public void movieUpdated(boolean listType) { }
 
     @Override
-    public void listOfAllMovies(ArrayList<Movie> movies) { }
+    public void listOfAllMovies(List<Movie> movies) { }
 
     @Override
-    public void listOfWatchLaterMovies(ArrayList<Movie> movies) { }
+    public void listOfWatchLaterMovies(List<Movie> movies) { }
 }

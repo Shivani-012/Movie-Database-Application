@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,10 +28,17 @@ public class SearchActivity extends AppCompatActivity implements
     NetworkingService networkingManager;
     JsonService jsonManager;
 
+    String currentQuery;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        // get query from save instance state
+        if (savedInstanceState != null){
+            currentQuery = savedInstanceState.getString("currentQuery");
+        }
 
         // get networking service and set listener
         networkingManager = ((MyApp)getApplication()).getNetworkingService();
@@ -63,11 +71,17 @@ public class SearchActivity extends AppCompatActivity implements
 
         // get search view query
         SearchView searchView = (SearchView) searchViewMenuItem.getActionView();
-        String searchFor = searchView.getQuery().toString();
+
+        // set the previous query in the search bar (for screen rotation)
+        if (currentQuery != null){
+            searchView.setQuery(currentQuery, false);
+        }
+
+        currentQuery = searchView.getQuery().toString();
         // if query is empty, set icon and query
-        if (!searchFor.isEmpty()) {
+        if (!currentQuery.isEmpty()) {
             searchView.setIconified(false);
-            searchView.setQuery(searchFor, false);
+            searchView.setQuery(currentQuery, false);
         }
 
         // set query hint
@@ -79,6 +93,7 @@ public class SearchActivity extends AppCompatActivity implements
             @Override
             // when text is submitted (user enters)
             public boolean onQueryTextSubmit(String query) {
+                currentQuery = query;
                 // search for movie using the text the user entered
                 networkingManager.searchForMovie(query);
                 return true;
@@ -87,6 +102,7 @@ public class SearchActivity extends AppCompatActivity implements
             @Override
             // when text in search bar is changed (user types)
             public boolean onQueryTextChange(String newText) {
+                currentQuery = newText;
                 // if the text is more than 3 characters
                 if (newText.length() >= 3) {
                     // search for movies
@@ -133,5 +149,12 @@ public class SearchActivity extends AppCompatActivity implements
     // method that detects when a bitmap image is returned from another thread
     public void imageListener(Bitmap image, MovieRecyclerAdapter.MovieViewHolder holder) {
         holder.posterImg.setImageBitmap(image);
+    }
+
+    @Override
+    // save counter values in save instance state
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("currentQuery", currentQuery);
     }
 }

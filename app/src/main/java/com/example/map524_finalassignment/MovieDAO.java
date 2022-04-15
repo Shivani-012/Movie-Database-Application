@@ -3,28 +3,29 @@ package com.example.map524_finalassignment;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Dao
 public interface MovieDAO {
 
-    @Insert
+    @Insert (onConflict = OnConflictStrategy.REPLACE)
     void addMovie(Movie newMovie);
 
     @Delete
     void removeMovie(Movie movieToRemove);
 
     @Query("SELECT * FROM Movie")
-    ArrayList<Movie> getAllMovies();
+    List<Movie> getAllMovies();
 
     @Query("SELECT * FROM Movie WHERE isFavourite = 1")
-    ArrayList<Movie> getFavouriteMovies();
+    List<Movie> getFavouriteMovies();
 
     @Query("SELECT * FROM Movie WHERE isWatchLater = 1")
-    ArrayList<Movie> getWatchLaterMovies();
+    List<Movie> getWatchLaterMovies();
 
     @Update
     void updateMovie(Movie movieToUpdate);

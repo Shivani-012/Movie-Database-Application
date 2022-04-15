@@ -1,8 +1,10 @@
 package com.example.map524_finalassignment;
 
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.RequiresApi;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -39,16 +41,20 @@ public class Movie implements Parcelable {
     }
 
     // parcelable movie constructor
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     protected Movie(Parcel in) {
         id = in.readInt();
         title = in.readString();
         releaseYear = in.readString();
         description = in.readString();
         posterPath = in.readString();
+        isFavourite = in.readBoolean();
+        isWatchLater = in.readBoolean();
     }
 
 
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @RequiresApi(api = Build.VERSION_CODES.Q)
         @Override
         public Movie createFromParcel(Parcel in) {
             return new Movie(in);

@@ -19,6 +19,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:contentDescription="@string/movie_image_content_description"
+
+        android:layout_margin="5dp"
         />
 
     <TextView

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MovieDetailActivity extends AppCompatActivity implements
         NetworkingService.NetworkingListener,
@@ -55,6 +56,7 @@ public class MovieDetailActivity extends AppCompatActivity implements
 
         // get database manager from myApp and get movie database
         dbManager = ((MyApp)getApplication()).dbManager;
+        dbManager.listener = this;
         dbManager.getMovieDB(this);
 
         // get indicator flags for list types
@@ -110,9 +112,14 @@ public class MovieDetailActivity extends AppCompatActivity implements
 
         // check if movie is already in favourites list
         if (currentMovie.isFavourite()){
-            // set abort message
-            message = currentMovie.getTitle() + " in already in Favourite Movies list.";
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+
+            // use alert dialog to display that movie is already in Favourite Movies list
+            builder.setMessage(currentMovie.getTitle() + " in already in Favourite Movies list.")
+                    .setPositiveButton("OK", (dialog, i) -> {
+                        dialog.dismiss();
+                    })
+                    .setCancelable(false)
+                    .show();
         }
         // else movie is not in favourites list
         else {
@@ -161,9 +168,14 @@ public class MovieDetailActivity extends AppCompatActivity implements
 
         // check if movie is already in watch later list
         if (currentMovie.isWatchLater()){
-            // set abort message
-            message = currentMovie.getTitle() + " in already in Watch Later list.";
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+
+            // use alert dialog to display that movie is already in Watch Later list
+            builder.setMessage(currentMovie.getTitle() + " in already in Watch Later list.")
+                    .setPositiveButton("OK", (dialog, i) -> {
+                        dialog.dismiss();
+                    })
+                    .setCancelable(false)
+                    .show();
         }
         // else movie is not in watch later list
         else {
@@ -250,11 +262,11 @@ public class MovieDetailActivity extends AppCompatActivity implements
     public void movieRemoved(boolean result) { }
 
     @Override
-    public void listOfAllMovies(ArrayList<Movie> movies) { }
+    public void listOfAllMovies(List<Movie> movies) { }
 
     @Override
-    public void listOfFavouriteMovies(ArrayList<Movie> movies) { }
+    public void listOfFavouriteMovies(List<Movie> movies) { }
 
     @Override
-    public void listOfWatchLaterMovies(ArrayList<Movie> movies) { }
+    public void listOfWatchLaterMovies(List<Movie> movies) { }
 }
